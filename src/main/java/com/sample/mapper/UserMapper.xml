@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sample.mapper.UserDao">
+<select id="listUser" parameterType="hashmap" resultType="list" resultMap="userMap">
+  select
+  t.`id` as `id`,
+  t.`username` as `username`,
+  t.`sex` as `sex`,
+  t.`mobilephone` as `mobilephone`,
+  t.`email` as `email`,
+  t.`address` as `address`,
+  t.`createtime` as `createtime`
+  from `user` t
+  <where>
+     <if test="startDate != null and  startDate != ''">
+         <![CDATA[ and createtime  >=  #{startDate}  ]]>
+     </if>
+     <if test="endDate != null and  endDate != ''">
+         <![CDATA[ and createtime  >=  #{endDate}  ]]>
+     </if>
+  </where>
+</select>
+<insert id="insertUser">
+ insert into `t_user`(name,sex) values(#{name},#{sex})
+</insert>
+<select id="findUserById" resultType="com.sample.domain.User">
+ select 
+ t.`id` as `id`,
+ t.`name` as `name`,
+ t.`sex` as `sex`
+ from `t_user` t
+ where t.`id`= #{userId}
+</select>
+<resultMap type="com.sample.domain.User" id="userMap">
+  <id property="id" column="id" />
+  <result property="username" column="username" />
+  <result property="sex" column="sex" />
+  <result property="mobilephone" column="mobilephone" />
+  <result property="email" column="email" />
+  <result property="address" column="address" />
+  <result property="createtime" column="createtime" />
+ </resultMap>
+
+</mapper>

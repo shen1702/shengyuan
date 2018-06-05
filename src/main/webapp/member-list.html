@@ -15,7 +15,26 @@
 	src="https://cdn.bootcss.com/Swiper/3.4.2/js/swiper.jquery.min.js"></script>
 <script src="./lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="./js/xadmin.js"></script>
+<script type="text/html" id="barDemo">
+<a style="text-decoration:none" onclick="member_stop(this,'10001')" href="javascript:;" title="停用">
+<i class="layui-icon">&#xe601;</i>
+</a>
 
+<a title="编辑" href="javascript:;" onclick="member_edit('编辑','member-edit.html','4','','510')" class="ml-5" style="text-decoration:none">
+<i class="layui-icon">&#xe642;</i>
+</a>
+
+<a style="text-decoration:none"  onclick="member_password('修改密码','member-password.html','10001','600','400')" href="javascript:;" title="修改密码">
+<i class="layui-icon">&#xe631;</i>
+</a>
+
+<a title="删除" href="javascript:;" onclick="member_del(this,'1')" style="text-decoration:none">
+<i class="layui-icon">&#xe640;</i>
+</a>
+</script>
+<script type="text/html" id="staDemo">
+<span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span>
+</script>
 </head>
 <body>
 	<!-- 顶部开始 -->
@@ -172,7 +191,7 @@
 					<i class="layui-icon">&#xe608;</i>添加
 				</button>
 				<span class="x-right" style="line-height: 40px">共有数据：88 条</span></xblock>
-				<table class="layui-table"
+				<!--<table class="layui-table"
 					lay-data="{height:315, url:'/MySample/users/', page:true, id:'test'}"
 					lay-filter="test">
 					<thead>
@@ -190,7 +209,8 @@
 						</tr>
 					</thead>
 
-				</table>
+				</table>-->
+				<table class="layui-hide" id="test"></table>
 				<!-- 右侧内容框架，更改从这里结束 -->
 			</div>
 		</div>
@@ -253,37 +273,34 @@
 	<!-- 背景切换结束 -->
 	<!-- 页面动态效果 -->
 	<script>
-		layui.use([ 'laydate' ], function() {
+		layui.use([ 'laydate','table' ], function() {
+			alert('1');
 			var laydate = layui.laydate; //日期
-
-			var start = {
-				min : laydate.now(),
-				max : '2099-06-16 23:59:59',
-				istoday : false,
-				choose : function(datas) {
-					end.min = datas; //开始日选好后，重置结束日的最小日期
-					end.start = datas //将结束日的初始值设定为开始日
+			var table = layui.table;
+			
+			table.render({
+				elem: '#test'
+				,url:'/MySample/users'
+				,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+				  layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+				  //,curr: 5 //设定初始在第 5 页
+				  ,groups: 1 //只显示 1 个连续页码
+				  ,first: false //不显示首页
+				  ,last: false //不显示尾页
+				  
 				}
-			};
-
-			var end = {
-				min : laydate.now(),
-				max : '2099-06-16 23:59:59',
-				istoday : false,
-				choose : function(datas) {
-					start.max = datas; //结束日选好后，重置开始日的最大日期
-				}
-			};
-
-			document.getElementById('LAY_demorange_s').onclick = function() {
-				start.elem = this;
-				laydate(start);
-			}
-			document.getElementById('LAY_demorange_e').onclick = function() {
-				end.elem = this
-				laydate(end);
-			}
-
+				,cols: [[
+				{checkbox:true}
+				 ,{field:'id',title: 'ID'}
+				  ,{field:'username',title: '用户名'}
+				  ,{field:'sex',title: '性别'}
+				  ,{field:'mobilephone',title: '手机'}
+				  ,{field:'email',title: '邮箱'}
+				  ,{field:'address',title: '地址'}
+				  ,{field:'createtime',title: '加入时间'}
+				  
+				]]
+			});
 		});
 
 		//批量删除提交
@@ -383,25 +400,6 @@
 			s.parentNode.insertBefore(hm, s);
 		})();
 	</script>
-	<script type="text/html" id="barDemo">
-<a style="text-decoration:none" onclick="member_stop(this,'10001')" href="javascript:;" title="停用">
-<i class="layui-icon">&#xe601;</i>
-</a>
 
-<a title="编辑" href="javascript:;" onclick="member_edit('编辑','member-edit.html','4','','510')" class="ml-5" style="text-decoration:none">
-<i class="layui-icon">&#xe642;</i>
-</a>
-
-<a style="text-decoration:none"  onclick="member_password('修改密码','member-password.html','10001','600','400')" href="javascript:;" title="修改密码">
-<i class="layui-icon">&#xe631;</i>
-</a>
-
-<a title="删除" href="javascript:;" onclick="member_del(this,'1')" style="text-decoration:none">
-<i class="layui-icon">&#xe640;</i>
-</a>
-				</script>
-	<script type="text/html" id="staDemo">
-				  <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span>
-				</script>
 </body>
 </html>

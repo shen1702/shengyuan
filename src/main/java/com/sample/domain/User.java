@@ -13,6 +13,7 @@ public class User {
 	private String address;
 	private Timestamp createtime;
 	private Boolean status;
+	private long total;
 
 	public long getId() {
 		return id;
@@ -84,6 +85,14 @@ public class User {
 
 	public void setStatus(Boolean status) {
 		this.status = status;
+	}
+
+	public long getTotal() {
+		return total;
+	}
+
+	public void setTotal(long total) {
+		this.total = total;
 	}
 
 }

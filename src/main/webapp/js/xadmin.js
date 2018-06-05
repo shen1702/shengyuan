@@ -3,7 +3,7 @@ $(function () {
     layui.use(['form','element'],
     function() {
         layer = layui.layer;
-        element = layui.element();
+        element = layui.element;
     });
 
 	//初如化背景

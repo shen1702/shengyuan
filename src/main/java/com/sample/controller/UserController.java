@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.sample.common.JsonResult;
 import com.sample.domain.User;
+import com.sample.pojo.LayuiTableResult;
 import com.sample.servise.UserService;
 
 @Controller
@@ -27,15 +28,38 @@ public class UserController {
 	private UserService entityService;
 
 	// 列出所有的用户
+	@SuppressWarnings({ "finally", "null" })
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String list(@RequestParam(value = "startDate", required = false) String startDate,
-			@RequestParam(value = "endDate", required = false) String endDate) {
-		Map<String, String> pram = new HashMap<String, String>();
-		pram.put("startDate", startDate);
-		pram.put("endDate", endDate);
-		List<User> users = entityService.listUser(pram);
-		return JSON.toJSONString(users);
+			@RequestParam(value = "endDate", required = false) String endDate,
+			@RequestParam(value = "page", required = false) int page,
+			@RequestParam(value = "limit", required = false) int limit) {
+		LayuiTableResult result = new LayuiTableResult();
+		try {
+			Map<String, String> pram = new HashMap<String, String>();
+			pram.put("startDate", startDate);
+			pram.put("endDate", endDate);
+			pram.put("pageStart", String.valueOf((page - 1) * limit));
+			pram.put("limit", String.valueOf(limit));
+			result.setCode(200);
+			result.setMsg("成功");
+			List<User> users = entityService.listUser(pram);
+			if (users != null) {
+				result.setCount(users.get(0).getTotal());
+			} else {
+				result.setCount(0);
+			}
+			result.setData(users);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			result.setCode(500);
+			result.setMsg("失败");
+			result.setCount(0);
+			result.setData(null);
+		} finally {
+			return JSON.toJSONString(result);
+		}
 	}
 
 	// 添加用户

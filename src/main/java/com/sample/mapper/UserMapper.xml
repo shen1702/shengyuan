@@ -9,7 +9,8 @@
   t.`mobilephone` as `mobilephone`,
   t.`email` as `email`,
   t.`address` as `address`,
-  t.`createtime` as `createtime`
+  t.`createtime` as `createtime`,
+  count(*) as `total`
   from `user` t
   <where>
      <if test="startDate != null and  startDate != ''">
@@ -19,6 +20,10 @@
          <![CDATA[ and createtime  >=  #{endDate}  ]]>
      </if>
   </where>
+  <if test="(pageStart != null and pageStart != '') and pageEnd != null and pageEnd != ''">
+    limit #{pageStart}, #{limit}
+  </if>
+  
 </select>
 <insert id="insertUser">
  insert into `t_user`(name,sex) values(#{name},#{sex})
